@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Agende seu horário</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🪒 Agende seu horário 🪒</h1>
+    <form id="appointment-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nome">Nome:</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label for="telefone">Telefone:</label>
+          <input type="text" id="telefone" name="telefone" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="servico">Serviço:</label>
+          <select id="servico" name="servico" required>
+            <option value="">Selecione um serviço</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="barbeiro">Barbeiro:</label>
+          <select id="barbeiro" name="barbeiro" required>
+            <option value="">Selecione um barbeiro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="data">Data:</label>
+          <input type="date" id="data" name="data" required>
+        </div>
+        <div class="form-group">
+          <label for="hora">Horário:</label>
+          <select id="hora" name="hora" required>
+            <option value="">Selecione</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="flex:1;">
+          <label for="obs">Observações:</label>
+          <input type="text" id="obs" name="obs">
+        </div>
+      </div>
+      <button type="submit">Agendar</button>
+    </form>
+  </div>
+  <script src="agendamento.js"></script>
+</body>
+</html>

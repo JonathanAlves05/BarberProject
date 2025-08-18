@@ -1,0 +1,215 @@
+/*
+ * ===========================================
+ * ESTILOS GERAIS DA SEÇÃO DE SERVIÇOS
+ * ===========================================
+ */
+#servicos {
+    background-color: black;
+    min-height: 100vh; /* Garante que a seção ocupe pelo menos a altura da tela */
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+    margin-bottom: 0;
+}
+
+.txtServicos {
+    display: flex;
+    flex-direction: column;
+    color: #E6E6E6; /* Cor do título principal da seção */
+    align-items: center;
+    margin-bottom: 2rem;
+    font-size: 3rem;
+    /* padding-top: 3rem;  REMOVIDO: Transferido para #servicos para centralizar o padding de toda a seção */
+}
+
+/*
+ * ===========================================
+ * ESTILOS DO SWIPER (CARROSSEL DE SERVIÇOS)
+ * ===========================================
+ */
+.swiper {
+    width: 100%; /* Ocupa a largura total do seu contêiner pai */
+    
+    max-width: 60rem; /* Limita a largura máxima do Swiper */
+    margin: 0 auto; /* Centraliza o Swiper */
+    position: relative;
+}
+
+/* Estilos dos slides individuais */
+.swiper-slide {
+    display: flex;
+    flex-direction: column;
+    color: #C5A880; /* Cor do texto dentro do slide */
+    background-color: #532E1C; /* Cor de fundo do slide */
+    /* width: 230rem; REMOVIDO: Este valor fixo é problemático para responsividade. O Swiper gerencia a largura dos slides automaticamente ou via CSS mais flexível. Se precisar de uma largura mínima, use min-width. */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
+    overflow: hidden; /* Garante que nada vaze do slide */
+}
+
+.imgServicos {
+   
+    width: 100%; /* Ocupa toda a largura do slide */
+    height: 20rem; /* Altura fixa para a imagem */
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    padding: 0;
+    border-radius: 0.6rem 0.6rem 0 0; /* Bordas arredondadas apenas no topo */
+}
+
+.nomeServico {
+    font-size: 1.8rem;
+    color: #C5A880; /* Cor do nome do serviço */
+    margin-top: 1rem;
+    margin-bottom: 1rem; /* Reduzi para evitar espaçamento excessivo */
+}
+
+.precoServico {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #E6E6E6; /* Cor do preço, para um bom contraste */
+    padding-bottom: 2rem; /* Padding na parte inferior do preço */
+}
+
+/*
+ * ===========================================
+ * ESTILOS DOS CONTROLES DO SWIPER (SETAS E PAGINAÇÃO)
+ * ===========================================
+ */
+
+/* Setas de navegação (Anterior/Próximo) */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #fff !important;
+  font-size: 2.2rem;
+  font-weight: bold;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  /* Aumenta a área de clique */
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Posição das setas (podem ser ajustadas conforme seu layout) */
+.swiper-button-next {
+    right: 10px; /* Afasta da borda */
+    left: auto;
+}
+
+.swiper-button-prev {
+    left: 10px; /* Afasta da borda */
+    right: auto;
+}
+
+/* Pontos de paginação (indicadores de slide) */
+.swiper-pagination-bullet {
+    background: #ffffff !important; /* Cor dos pontos inativos (um tom escuro de dourado ou marrom) */
+    opacity: 0.7;
+}
+
+.swiper-pagination-bullet-active {
+    background: #ffffff !important; /* Cor dos pontos ativos (dourado) */
+    opacity: 1;
+}
+
+/*
+ * ===========================================
+ * MEDIA QUERIES PARA RESPONSIVIDADE DOS SERVIÇOS
+ * ===========================================
+ */
+@media (max-width: 999px) {
+.swiper {
+    padding: 0 0.5rem;
+    position: relative;
+  }
+
+  .swiper-slide {
+    width: 90vw;
+    max-width: 340px;
+    min-width: 220px;
+    margin: 0 auto;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #532E1C;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .imgServicos {
+    width: 100%;
+    height: 50%;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 22px;
+    margin-top: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    display: block;
+  }
+
+  .nomeServico {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.7rem;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+
+  .precoServico {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    margin-top: 0.2rem;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .descServico {
+    font-size: 1.05rem;
+    color: #fff;
+    margin-bottom: 1.2rem;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .btn-servico {
+    font-size: 1.08rem;
+    padding: 12px 28px;
+    margin-top: auto;
+    background: linear-gradient(90deg, #ffd700 60%, #ffb300 100%);
+    color: #222;
+    border: none;
+    border-radius: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  .btn-servico:hover {
+    background: #fff;
+    color: #222;
+    transform: translateY(-2px) scale(1.04);
+  }
+
+  .swiper-pagination {
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    position: absolute;
+  }
+}
+

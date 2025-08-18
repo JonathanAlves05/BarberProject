@@ -1,0 +1,63 @@
+body {
+  background: #181818;
+  color: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.painel-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #232323;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  padding: 32px 24px;
+}
+h1 {
+  text-align: center;
+  color: #ffd700;
+  margin-bottom: 24px;
+}
+#barbeiro-id, button {
+  font-size: 1rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  margin: 0 4px 12px 0;
+}
+button {
+  background: #ffd700;
+  color: #222;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #e6c200;
+}
+.agendamento-card {
+  background: #181818;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  margin: 16px 0;
+  padding: 18px 14px;
+  border-left: 4px solid #ffd700;
+}
+.agendamento-card label {
+  color: #ffd700;
+  font-weight: bold;
+}
+.agendamento-card input[type="text"] {
+  width: 100%;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background: #232323;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.status-salvo {
+  color: #4caf50;
+  font-size: 0.95em;
+  margin-left: 8px;
+}

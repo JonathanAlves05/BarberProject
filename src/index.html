@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Made in Favela</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="icon" type="image/x-icon" href="/images/imgBarb.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/servicos.css">
+    <link rel="stylesheet" href="css/footer.css">
+
+    
+  
+</head>
+<!-- Modal do Agendamento -->
+<div id="modal-agendamento" class="modal-agendamento">
+  <div class="modal-content">
+    <span class="close-modal" id="close-modal">&times;</span>
+    <iframe src="/api/agendamento.html" frameborder="0" id="iframe-agendamento"></iframe>
+  </div>
+</div>
+
+<body>
+
+    <header>
+        <nav>
+        
+          <a class="logo" href="#">Emerson Barbearia</a>
+          <div class="mobile-menu">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+          </div>
+          <ul class="nav-list">
+            <li><a href="">Início</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#agendamento" class="open-agendamento">Agendamento</a></li>
+            <li><a href="#footer">Informações</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <section   class="section--inicio">
+        <div class="div--txtInicio">
+            <h1 class="txtPrincipal" >Bem-vindo à Emerson Barbearia!</h1>
+           <a href="#agendamento" class="btn-agende open-agendamento">Agende aqui</a>
+        </div>
+
+        <div>
+            <img class="logoInicio" src="../src/images/imgBarb.png" alt="">
+        </div>
+        
+      </section>
+
+      <section class="servicos" id="servicos">
+
+        <h2 class="txtServicos">Nossos Serviços</h2>
+
+        <div class="swiper">
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+             
+              <img class="imgServicos" src="images/imgCorte.jpg" alt="">
+              <h3 class="nomeServico">Corte</h3>
+              <p class="precoServico">35 R$</p>  
+            </div>
+
+            <div class="swiper-slide">
+              <img class="imgServicos" src="images/imgCorte.jpg" alt="">
+              <h3 class="nomeServico">Barba</h3>
+              <p class="precoServico">20 R$</p>  
+            </div>
+
+            <div class="swiper-slide">
+              <img class="imgServicos" src="images/imgCorte.jpg" alt="">
+              <h3 class="nomeServico">Sobrancelha</h3>
+              <p class="precoServico">10 R$</p>  
+            </div>
+
+            <div class="swiper-slide">
+              <img class="imgServicos" src="images/imgCorte.jpg" alt="">
+              <h3 class="nomeServico">Corte</h3>
+              <p class="precoServico">60 R$</p>  
+            </div>
+
+            <div class="swiper-slide">
+              <img class="imgServicos" src="images/imgCorte.jpg" alt="">
+              <h3 class="nomeServico">Barba</h3>
+              <p class="precoServico">20 R$</p>
+            </div>
+          
+          <div class="swiper-pagination"></div>
+        
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        
+        
+        </div>
+
+      </section>
+
+      <footer class="footer" id="footer">
+        <div class="footer-content">
+    <div class="footer-info">
+      <h3>Emerson Barbearia</h3>
+      <p>Rua Exemplo, 123 - Bairro, Cidade/UF</p>
+      <p>Telefone: <a href="tel:+5511999999999">(11) 99999-9999</a></p>
+      <p>Email: <a href="mailto:contato@emersonbarbearia.com">contato@emersonbarbearia.com</a></p>
+    </div>
+    <div class="footer-map">
+      <iframe
+        src="https://www.google.com/maps?q=-23.55052,-46.633308&z=15&output=embed"
+        width="300"
+        height="200"
+        style="border:0;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+      </footer>
+
+  
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+      <script src="javascript/mobile.js"></script>
+      <script src="javascript/agendamento.js"></script>
+      <script src="javascript/carrossel.js"></script>
+</body>
+</html>
