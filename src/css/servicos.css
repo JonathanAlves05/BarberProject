@@ -80,20 +80,18 @@
 /* Setas de navegação (Anterior/Próximo) */
 .swiper-button-prev,
 .swiper-button-next {
-  color: #fff !important;
-  font-size: 2.2rem;
-  font-weight: bold;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 9999;
-  /* Aumenta a área de clique */
+  color: #fff; /* ou a cor que preferir */
+  z-index: 10;
+    /* Aumenta a área de clique */
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0, 0, 0, 0);
   display: flex;
   align-items: center;
   justify-content: center;
+  
+
 }
 
 /* Posição das setas (podem ser ajustadas conforme seu layout) */
