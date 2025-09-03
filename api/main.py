@@ -1,5 +1,5 @@
 from typing import Optional, List
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 
 from fastapi import FastAPI, HTTPException, Depends
 from sqlmodel import Field, SQLModel, create_engine, Session, select
@@ -80,6 +80,24 @@ def get_session():
     with Session(engine) as session:
         yield session
 
+# --- Funções de horários e datas disponíveis ---
+
+def gerar_horarios_disponiveis(barbeiro_id: int, data: date, session: Session):
+    horarios = []
+    hora_inicio = 9
+    hora_fim = 21
+    for h in range(hora_inicio, hora_fim):
+        horario_dt = datetime.combine(data, time(h, 0))
+        existe = session.exec(
+            select(Agendamento).where(
+                Agendamento.barbeiro_id == barbeiro_id,
+                Agendamento.data_hora == horario_dt
+            )
+        ).first()
+        if not existe:
+            horarios.append(horario_dt.time())
+    return horarios
+
 # --- Aplicação FastAPI ---
 
 app = FastAPI(
@@ -112,7 +130,7 @@ def on_startup():
 # Barbeiros
 @app.post("/barbeiros/", response_model=BarbeiroPublic)
 def create_barbeiro(*, session: Session = Depends(get_session), barbeiro: BarbeiroCreate):
-    db_barbeiro = Barbeiro.model_validate(barbeiro)
+    db_barbeiro = Barbeiro.from_orm(barbeiro)
     session.add(db_barbeiro)
     session.commit()
     session.refresh(db_barbeiro)
@@ -126,7 +144,7 @@ def read_barbeiros(*, session: Session = Depends(get_session)):
 # Serviços
 @app.post("/servicos/", response_model=ServicoPublic)
 def create_servico(*, session: Session = Depends(get_session), servico: ServicoCreate):
-    db_servico = Servico.model_validate(servico)
+    db_servico = Servico.from_orm(servico)
     session.add(db_servico)
     session.commit()
     session.refresh(db_servico)
@@ -140,7 +158,7 @@ def read_servicos(*, session: Session = Depends(get_session)):
 # Horários Disponíveis
 @app.post("/horarios_disponiveis/", response_model=HorarioDisponivelPublic)
 def create_horario_disponivel(*, session: Session = Depends(get_session), horario: HorarioDisponivelCreate):
-    db_horario = HorarioDisponivel.model_validate(horario)
+    db_horario = HorarioDisponivel.from_orm(horario)
     session.add(db_horario)
     session.commit()
     session.refresh(db_horario)
@@ -163,25 +181,7 @@ def read_horarios_disponiveis(
 # Agendamentos
 @app.post("/agendamentos/", response_model=AgendamentoPublic)
 def create_agendamento(*, session: Session = Depends(get_session), agendamento: AgendamentoCreate):
-    barbeiro = session.get(Barbeiro, agendamento.barbeiro_id)
-    servico = session.get(Servico, agendamento.servico_id)
-    if not barbeiro:
-        raise HTTPException(status_code=404, detail="Barbeiro não encontrado")
-    if not servico:
-        raise HTTPException(status_code=404, detail="Serviço não encontrado")
-    requested_date = agendamento.data_hora.date()
-    requested_time = agendamento.data_hora.time()
-    available_slot = session.exec(
-        select(HorarioDisponivel).where(
-            HorarioDisponivel.barbeiro_id == agendamento.barbeiro_id,
-            HorarioDisponivel.data == requested_date,
-            HorarioDisponivel.hora_inicio <= requested_time,
-            HorarioDisponivel.hora_fim >= requested_time
-        )
-    ).first()
-    if not available_slot:
-        raise HTTPException(status_code=400, detail="Horário não disponível para este barbeiro.")
-    db_agendamento = Agendamento.model_validate(agendamento)
+    db_agendamento = Agendamento.from_orm(agendamento)
     session.add(db_agendamento)
     session.commit()
     session.refresh(db_agendamento)
@@ -197,46 +197,61 @@ def read_agendamentos(
     if barbeiro_id:
         query = query.where(Agendamento.barbeiro_id == barbeiro_id)
     if data:
-        query = query.where(Agendamento.data_hora.cast(date) == data)
+        query = query.where(Agendamento.data_hora >= datetime.combine(data, time(0, 0)),
+                            Agendamento.data_hora < datetime.combine(data + timedelta(days=1), time(0, 0)))
     agendamentos = session.exec(query).all()
     return agendamentos
 
 @app.get("/agendamentos/{agendamento_id}", response_model=AgendamentoPublic)
-def read_agendamento(*, session: Session = Depends(get_session), agendamento_id: int):
+def get_agendamento(agendamento_id: int, session: Session = Depends(get_session)):
     agendamento = session.get(Agendamento, agendamento_id)
     if not agendamento:
         raise HTTPException(status_code=404, detail="Agendamento não encontrado")
     return agendamento
 
 @app.put("/agendamentos/{agendamento_id}", response_model=AgendamentoPublic)
-def update_agendamento(
-    *,
-    session: Session = Depends(get_session),
-    agendamento_id: int,
-    agendamento_update: AgendamentoCreate
-):
-    agendamento = session.get(Agendamento, agendamento_id)
-    if not agendamento:
+def update_agendamento(agendamento_id: int, agendamento: AgendamentoCreate, session: Session = Depends(get_session)):
+    db_agendamento = session.get(Agendamento, agendamento_id)
+    if not db_agendamento:
         raise HTTPException(status_code=404, detail="Agendamento não encontrado")
-    update_data = agendamento_update.model_dump(exclude_unset=True)
-    for key, value in update_data.items():
-        setattr(agendamento, key, value)
-    session.add(agendamento)
+    for key, value in agendamento.dict().items():
+        setattr(db_agendamento, key, value)
+    session.add(db_agendamento)
     session.commit()
-    session.refresh(agendamento)
-    return agendamento
+    session.refresh(db_agendamento)
+    return db_agendamento
 
 @app.delete("/agendamentos/{agendamento_id}")
-def delete_agendamento(*, session: Session = Depends(get_session), agendamento_id: int):
+def delete_agendamento(agendamento_id: int, session: Session = Depends(get_session)):
     agendamento = session.get(Agendamento, agendamento_id)
     if not agendamento:
         raise HTTPException(status_code=404, detail="Agendamento não encontrado")
     session.delete(agendamento)
     session.commit()
-    return {"message": "Agendamento deletado com sucesso!"}
+    return {"ok": True}
+
 @app.get("/barbeiros/{barbeiro_id}/agendamentos/", response_model=List[AgendamentoPublic])
-def listar_agendamentos_barbeiro(barbeiro_id: int, session: Session = Depends(get_session)):
+def agendamentos_barbeiro(barbeiro_id: int, session: Session = Depends(get_session)):
     agendamentos = session.exec(
         select(Agendamento).where(Agendamento.barbeiro_id == barbeiro_id)
     ).all()
     return agendamentos
+
+# --- ENDPOINTS DE DATAS E HORÁRIOS DISPONÍVEIS ---
+
+@app.get("/barbeiros/{barbeiro_id}/datas_disponiveis/", response_model=List[date])
+def datas_disponiveis_barbeiro(barbeiro_id: int, session: Session = Depends(get_session)):
+    datas = []
+    hoje = date.today()
+    for i in range(30):  # próximos 30 dias
+        dia = hoje + timedelta(days=i)
+        horarios = gerar_horarios_disponiveis(barbeiro_id, dia, session)
+        if horarios:
+            datas.append(dia)
+    return datas
+
+@app.get("/barbeiros/{barbeiro_id}/horarios_disponiveis/", response_model=List[str])
+def horarios_disponiveis_barbeiro(barbeiro_id: int, data: date, session: Session = Depends(get_session)):
+    horarios = gerar_horarios_disponiveis(barbeiro_id, data, session)
+    # Retorna como string para facilitar o frontend
+    return [h.strftime("%H:%M") for h in horarios]

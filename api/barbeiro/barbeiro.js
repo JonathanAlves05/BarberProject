@@ -45,3 +45,48 @@ async function editarAgendamento(id) {
   salvo.style.display = 'inline';
   setTimeout(() => salvo.style.display = 'none', 1500);
 }
+async function carregarAgendamentos() {
+  const barbeiroId = document.getElementById('barbeiro-id').value;
+  const resp = await fetch(`${API_BASE_URL}/barbeiros/${barbeiroId}/agendamentos/`);
+  const agendamentos = await resp.json();
+  const div = document.getElementById('agendamentos');
+  div.innerHTML = '';
+  agendamentos.forEach(ag => {
+    div.innerHTML += `
+      <div class="agendamento-card">
+        <label>Cliente:</label> ${ag.cliente_nome}<br>
+        <label>Data/Hora:</label> ${formatarDataHora(ag.data_hora)}<br>
+        <label>Status:</label>
+        <input type="text" id="status-${ag.id}" value="${ag.status}">
+        <button onclick="editarAgendamento(${ag.id})">Salvar</button>
+        <button onclick="excluirAgendamento(${ag.id})" style="margin-left:8px;color:#fff;background:#d9534f;">Excluir</button>
+        <span id="salvo-${ag.id}" class="status-salvo" style="display:none;">Salvo!</span>
+      </div>
+    `;
+  });
+}
+
+// ...existing code...
+
+async function editarAgendamento(id) {
+  const resp = await fetch(`${API_BASE_URL}/agendamentos/${id}`);
+  const agendamento = await resp.json();
+  agendamento.status = document.getElementById('status-' + id).value;
+  await fetch(`${API_BASE_URL}/agendamentos/${id}`, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(agendamento)
+  });
+  const salvo = document.getElementById('salvo-' + id);
+  salvo.style.display = 'inline';
+  setTimeout(() => salvo.style.display = 'none', 1500);
+}
+
+// Adicione esta função ao final do arquivo
+async function excluirAgendamento(id) {
+  if (!confirm('Tem certeza que deseja excluir este horário?')) return;
+  await fetch(`${API_BASE_URL}/agendamentos/${id}`, {
+    method: 'DELETE'
+  });
+  carregarAgendamentos();
+}

@@ -28,38 +28,32 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
 
-  // Preencher horários disponíveis ao escolher barbeiro e data
-  form.data.addEventListener('change', atualizarHorarios);
-  form.barbeiro.addEventListener('change', atualizarHorarios);
+  form.barbeiro.addEventListener('change', function() {
+  form.data.value = '';
+  form.hora.innerHTML = '<option value="">Selecione</option>';
+  // Não faz mais nada, todas as datas ficam disponíveis
+});
 
-  function atualizarHorarios() {
-    const barbeiroId = form.barbeiro.value;
-    const data = form.data.value;
-    const selectHora = form.hora;
-    selectHora.innerHTML = '<option value="">Selecione</option>';
-    if (!barbeiroId || !data) return;
-    fetch(`http://127.0.0.1:8000/horarios_disponiveis/?barbeiro_id=${barbeiroId}&data=${data}`)
-      .then(resp => resp.json())
-      .then(horarios => {
-        horarios.forEach(h => {
-          // Gera opções de horários de 30 em 30 minutos dentro do intervalo disponível
-          let inicio = h.hora_inicio;
-          let fim = h.hora_fim;
-          let [hIni, mIni] = inicio.split(':').map(Number);
-          let [hFim, mFim] = fim.split(':').map(Number);
-          let dateIni = new Date(`2000-01-01T${inicio}`);
-          let dateFim = new Date(`2000-01-01T${fim}`);
-          while (dateIni <= dateFim) {
-            const horaStr = dateIni.toTimeString().slice(0,5);
-            const opt = document.createElement('option');
-            opt.value = horaStr;
-            opt.textContent = horaStr;
-            selectHora.appendChild(opt);
-            dateIni.setMinutes(dateIni.getMinutes() + 30);
-          }
-        });
+// Preencher horários disponíveis ao escolher data
+form.data.addEventListener('change', atualizarHorarios);
+
+function atualizarHorarios() {
+  const barbeiroId = form.barbeiro.value;
+  const data = form.data.value;
+  const selectHora = form.hora;
+  selectHora.innerHTML = '<option value="">Selecione</option>';
+  if (!barbeiroId || !data) return;
+  fetch(`http://127.0.0.1:8000/barbeiros/${barbeiroId}/horarios_disponiveis/?data=${data}`)
+    .then(resp => resp.json())
+    .then(horarios => {
+      horarios.forEach(hora => {
+        const opt = document.createElement('option');
+        opt.value = hora;
+        opt.textContent = hora;
+        selectHora.appendChild(opt);
       });
-  }
+    });
+}
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
